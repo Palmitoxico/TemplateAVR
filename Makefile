@@ -24,7 +24,7 @@ $(PRJ_NAME).elf: $(OBJ)
 .o:
 	$(CC) -c $(CFLAGS) $< -o $@
 
-$(PRJ_NAME).hex:
+$(PRJ_NAME).hex: $(PRJ_NAME).elf
 	$(OBJCOPY) $(OBJFLAGS)
 
 clean:
