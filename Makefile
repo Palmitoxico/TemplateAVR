@@ -1,7 +1,7 @@
 PRJ_NAME   = Template
 CC         = avr-gcc
-SRC        = src/main.c
-ASRC       = 
+SRC        = $(wildcard src/*.c)
+ASRC       = $(wildcard src/*.S)
 OBJ        = $(SRC:.c=.o) $(ASRC:.S=.o)
 OBJCOPY    = avr-objcopy
 OBJDUMP    = avr-objdump
