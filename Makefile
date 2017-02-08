@@ -1,7 +1,9 @@
 PRJ_NAME   = Template
 CC         = avr-gcc
-SRC        = $(wildcard src/*.c)
-ASRC       = $(wildcard src/*.S)
+CXX        = avr-g++
+SRCDIR     = src
+SRC        = $(wildcard $(SRCDIR)/*.c)
+ASRC       = $(wildcard $(SRCDIR)/*.S)
 OBJ        = $(SRC:.c=.o) $(ASRC:.S=.o)
 OBJCOPY    = avr-objcopy
 OBJDUMP    = avr-objdump
@@ -23,17 +25,22 @@ all: $(PRJ_NAME).elf $(PRJ_NAME).hex
 $(PRJ_NAME).elf: $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LDFLAGS)
 
-.c.o:
-	$(CC) -c $(CFLAGS) $< -o $@
+%.o: %.c $(DEPS)
+	$(CC) -MMD -c $(CFLAGS) $< -o $@
 
-.S.o:
-	$(CC) -c $(ASFLAGS) $< -o $@
+%.o: %.cpp $(DEPS)
+	$(CXX) -MMD -c $(CFLAGS) $< -o $@
+
+%.o: %.S $(DEPS)
+	$(CC) -MMD -c $(ASFLAGS) $< -o $@
+
+-include $(SRCDIR)/*.d
 
 $(PRJ_NAME).hex: $(PRJ_NAME).elf
 	$(OBJCOPY) $(OBJFLAGS)
 
 clean:
-	rm -f $(OBJ) *.map *.elf *.hex
+	rm -f $(OBJ) *.map *.elf *.hex $(SRCDIR)/*.d
 
 burn:
 	$(AVRDUDE) $(DUDEFLAGS)
