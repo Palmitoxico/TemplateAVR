@@ -3,8 +3,9 @@ CC         = avr-gcc
 CXX        = avr-g++
 SRCDIR     = src
 SRC        = $(wildcard $(SRCDIR)/*.c)
+CPPSRC     = $(wildcard $(SRCDIR)/*.cpp)
 ASRC       = $(wildcard $(SRCDIR)/*.S)
-OBJ        = $(SRC:.c=.o) $(ASRC:.S=.o)
+OBJ        = $(SRC:.c=.o) $(ASRC:.S=.o) $(CPPSRC:.cpp=.o)
 OBJCOPY    = avr-objcopy
 OBJDUMP    = avr-objdump
 AVRDUDE    = avrdude
