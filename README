@@ -24,3 +24,8 @@ Dependencies:
 This template uses by default avr-gcc to compile and link,
 and avrdude to upload to the target microcontroller through
 usbasp, but of course you can change it to suit your needs.
+
+Setup instructions for Ubuntu:
+	sudo apt install make avr-libc avrdude binutils-avr gcc-avr
+
+
