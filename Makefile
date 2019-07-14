@@ -8,18 +8,22 @@ ASRC       = $(wildcard $(SRCDIR)/*.S)
 OBJ        = $(SRC:.c=.o) $(ASRC:.S=.o) $(CPPSRC:.cpp=.o)
 OBJCOPY    = avr-objcopy
 OBJDUMP    = avr-objdump
+PGPORT    ?= /dev/ttyACM0
+BAUDRATE  ?= 57600
 AVRDUDE    = avrdude
-PROGRAMMER = usbasp
+PROGRAMMER = arduino
 DEVICE     = atmega328p
 OPTIMIZE   = -O2
-FREQ       = 8000000
+FREQ       = 16000000
 OPTIONS    = -fpack-struct -fshort-enums
-CFLAGS     = -Wall -gdwarf-2 $(OPTIMIZE) -mmcu=$(DEVICE) -DF_CPU=$(FREQ)
+CFLAGS     = -Wall -gdwarf-2 $(OPTIMIZE) -mmcu=$(DEVICE) -DF_CPU=$(FREQ) -std=c++11
 ASFLAGS    = -Wall -gstabs -mmcu=$(DEVICE) -DF_CPU=$(FREQ)
 LDFLAGS    = -Wl,-Map,$(PRJ_NAME).map
 OBJFLAGS   = -R .eeprom -O ihex "$(PRJ_NAME).elf" "$(PRJ_NAME).hex"
-DUDEFLAGS  = -c $(PROGRAMMER) -p $(DEVICE) -u -U flash:w:"$(PRJ_NAME).hex"
+DUDEFLAGS  = -c $(PROGRAMMER) -p $(DEVICE) -P $(PGPORT) -B $(BAUDRATE) -u -U flash:w:"$(PRJ_NAME).hex"
 RSTFLAGS   = -c $(PROGRAMMER) -p $(DEVICE)
+
+-include config.mk
 
 all: $(PRJ_NAME).elf $(PRJ_NAME).hex
 
